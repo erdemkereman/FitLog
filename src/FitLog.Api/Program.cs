@@ -1,6 +1,8 @@
+using FitLog.Api.Data;
 using FitLog.Api.Interfaces;
 using FitLog.Api.Repositories;
 using FitLog.Api.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddScoped<IExerciseService,ExerciseService>();
 builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
+builder.Services.AddDbContext<FitLogDbContext>();
+builder.Services.AddDbContext<FitLogDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
