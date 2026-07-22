@@ -10,7 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddScoped<IExerciseService,ExerciseService>();
 builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
-builder.Services.AddDbContext<FitLogDbContext>();
 builder.Services.AddDbContext<FitLogDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));

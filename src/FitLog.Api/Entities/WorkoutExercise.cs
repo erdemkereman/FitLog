@@ -8,4 +8,8 @@ public class WorkoutExercise
     public double Weight { get; set; }
     public int RepetititonCount { get; set; }
     public int SetCount { get; set; }
+    
+    public Workout Workout { get; set; } = null!;
+    public Exercise Exercise { get; set; } = null!;
+    
 }

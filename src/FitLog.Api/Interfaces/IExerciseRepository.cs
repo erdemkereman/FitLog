@@ -1,8 +1,9 @@
-﻿using FitLog.Api.Dtos;
+﻿
+using FitLog.Api.Entities;
 
 namespace FitLog.Api.Interfaces;
 
 public interface IExerciseRepository
 {
-    void CreateExercise(CreateExerciseDto dto);
+    void CreateExercise(Exercise exercise);
 }

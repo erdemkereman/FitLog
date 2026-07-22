@@ -1,4 +1,5 @@
 ﻿using FitLog.Api.Dtos;
+using FitLog.Api.Entities;
 using FitLog.Api.Interfaces;
 
 namespace FitLog.Api.Services;
@@ -10,9 +11,17 @@ public class ExerciseService:IExerciseService
     {
         _exerciseRepository = exerciseRepository;
     }
-    
+
     public void CreateExercise(CreateExerciseDto dto)
     {
-        _exerciseRepository.CreateExercise(dto);
+        Exercise exercise = new Exercise
+        {
+            Name =  dto.Name,
+            ExerciseType =  dto.ExerciseType,
+            MuscleGroup = dto.MuscleGroup,
+            EquipmentType = dto.EquipmentType,
+            TutorialUrl = dto.TutorialUrl,
+        };
+        _exerciseRepository.CreateExercise(exercise);
     }
 }
