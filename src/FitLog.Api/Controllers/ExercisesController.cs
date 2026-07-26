@@ -1,6 +1,5 @@
 ﻿using FitLog.Api.Dtos;
 using FitLog.Api.Interfaces;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FitLog.Api.Controllers;
@@ -17,9 +16,9 @@ public class ExercisesController: ControllerBase
         _exerciseService = exerciseService;
     }
     [HttpPost]
-    public IActionResult CreateExercise(CreateExerciseDto dto)
+    public async Task<IActionResult> CreateExercise(CreateExerciseDto dto)
     {
-        _exerciseService.CreateExercise(dto);
+        await _exerciseService.CreateExerciseAsync(dto);
         return Ok(dto); 
     }
 }

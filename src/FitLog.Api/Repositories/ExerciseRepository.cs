@@ -1,5 +1,4 @@
 ﻿using FitLog.Api.Data;
-using FitLog.Api.Dtos;
 using FitLog.Api.Entities;
 using FitLog.Api.Interfaces;
 
@@ -12,10 +11,10 @@ public class ExerciseRepository : IExerciseRepository
     {
         _context = context;
     }
-
-    public void CreateExercise(Exercise exercise)
-    {
+    
+    public async Task CreateExerciseAsync(Exercise exercise)
+    { 
         _context.Exercises.Add(exercise);
-        _context.SaveChanges();
+       await _context.SaveChangesAsync();
     }
 }

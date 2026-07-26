@@ -4,5 +4,5 @@ namespace FitLog.Api.Interfaces;
 
 public interface IExerciseService
 {
-     void CreateExercise(CreateExerciseDto dto);
+     Task CreateExerciseAsync(CreateExerciseDto dto);
 }
