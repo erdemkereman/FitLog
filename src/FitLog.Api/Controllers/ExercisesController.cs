@@ -21,4 +21,22 @@ public class ExercisesController: ControllerBase
         await _exerciseService.CreateExerciseAsync(dto);
         return Ok(dto); 
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllExercisesAsync()
+    {
+      List<ExerciseDto> exercises= await _exerciseService.GetAllExercisesAsync();
+        return Ok(exercises);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetExerciseByIdAsync(int id)
+    {
+        ExerciseDto? exerciseDto= await _exerciseService.GetExerciseByIdAsync(id);
+        if (exerciseDto == null)
+        {
+            return NotFound();
+        }
+        return Ok(exerciseDto);
+    }
 }

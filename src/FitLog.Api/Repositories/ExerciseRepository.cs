@@ -1,6 +1,7 @@
 ﻿using FitLog.Api.Data;
 using FitLog.Api.Entities;
 using FitLog.Api.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace FitLog.Api.Repositories;
 
@@ -16,5 +17,17 @@ public class ExerciseRepository : IExerciseRepository
     { 
         _context.Exercises.Add(exercise);
        await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<Exercise>> GetAllExercisesAsync()
+    {
+        List<Exercise> exercises= await _context.Exercises.ToListAsync();
+        return exercises;
+    }
+
+    public async Task<Exercise?> GetExerciseAsync(int id)
+    {
+        Exercise? exercise= await _context.Exercises.FindAsync(id);
+        return exercise;
     }
 }
