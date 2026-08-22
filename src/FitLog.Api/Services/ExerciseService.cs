@@ -16,36 +16,6 @@ public class ExerciseService : IExerciseService
 
     public async Task CreateExerciseAsync(CreateExerciseDto dto)
     {
-        if (dto is null)
-        {
-            throw new ArgumentNullException(nameof(dto));
-        }
-
-        if (string.IsNullOrWhiteSpace(dto.Name))
-        {
-            throw new ArgumentException(nameof(dto.Name));
-        }
-
-        if (string.IsNullOrWhiteSpace(dto.MuscleGroup))
-        {
-            throw new ArgumentException(nameof(dto.MuscleGroup));
-        }
-
-        if (string.IsNullOrWhiteSpace(dto.ExerciseType))
-        {
-            throw new ArgumentException(nameof(dto.ExerciseType));
-        }
-
-        if (string.IsNullOrWhiteSpace(dto.EquipmentType))
-        {
-            throw new ArgumentException(nameof(dto.EquipmentType));
-        }
-
-        if (string.IsNullOrWhiteSpace(dto.TutorialUrl))
-        {   
-            throw new ArgumentException(nameof(dto.TutorialUrl));
-        }
-
         Exercise exercise = new Exercise
         {
             Name = dto.Name,
