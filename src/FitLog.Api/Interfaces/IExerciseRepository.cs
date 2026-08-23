@@ -11,4 +11,6 @@ public interface IExerciseRepository
     
     Task<Exercise?> GetExerciseAsync(int id);
     
+    Task UpdateExerciseAsync(Exercise exercise);
+    
 }

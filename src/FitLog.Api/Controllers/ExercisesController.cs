@@ -39,4 +39,17 @@ public class ExercisesController: ControllerBase
         }
         return Ok(exerciseDto);
     }
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateExerciseAsync([FromRoute] int id, [FromBody] UpdateExerciseDto dto)
+    {
+        bool isUpdated = await _exerciseService.UpdateExerciseAsync(id, dto);
+
+        if (!isUpdated)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
+   
 }

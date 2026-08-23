@@ -1,6 +1,7 @@
 ﻿using FitLog.Api.Dtos;
 using FitLog.Api.Entities;
 using FitLog.Api.Interfaces;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 
 namespace FitLog.Api.Services;
@@ -62,5 +63,22 @@ public class ExerciseService : IExerciseService
             TutorialUrl = exercises.TutorialUrl
         };
         return exerciseDto;
+    }
+
+    public async Task<bool> UpdateExerciseAsync(int id,UpdateExerciseDto dto)
+    {
+        Exercise? exercises = await _exerciseRepository.GetExerciseAsync(id);
+        if (exercises is null)
+        {
+            return false;
+        }
+        exercises.Name = dto.Name;
+        exercises.MuscleGroup = dto.MuscleGroup;
+        exercises.ExerciseType = dto.ExerciseType;
+        exercises.EquipmentType = dto.EquipmentType;
+        exercises.TutorialUrl = dto.TutorialUrl;
+        await _exerciseRepository.UpdateExerciseAsync(exercises);
+        return true;
+
     }
 }

@@ -30,4 +30,10 @@ public class ExerciseRepository : IExerciseRepository
         Exercise? exercise= await _context.Exercises.FindAsync(id);
         return exercise;
     }
+
+    public Task UpdateExerciseAsync(Exercise exercise)
+    {
+        _context.Exercises.Update(exercise);
+        return _context.SaveChangesAsync();
+    }
 }
