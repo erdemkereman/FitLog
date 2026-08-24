@@ -8,4 +8,5 @@ public interface IExerciseService
      Task<List<ExerciseDto>>GetAllExercisesAsync();
      Task <ExerciseDto?> GetExerciseByIdAsync(int id);
      Task<bool> UpdateExerciseAsync(int id,UpdateExerciseDto dto);
+     Task<bool> DeleteExerciseAsync(int id);
 }

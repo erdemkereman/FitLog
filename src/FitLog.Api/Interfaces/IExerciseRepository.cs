@@ -13,4 +13,5 @@ public interface IExerciseRepository
     
     Task UpdateExerciseAsync(Exercise exercise);
     
+    Task DeleteExerciseAsync(Exercise exercise);
 }

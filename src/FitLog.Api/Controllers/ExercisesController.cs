@@ -51,5 +51,17 @@ public class ExercisesController: ControllerBase
 
         return NoContent();
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteExerciseAsync(int id)
+    {
+        bool isDeleted = await _exerciseService.DeleteExerciseAsync(id);
+        
+        if (!isDeleted)
+        {
+            return NotFound();
+        }
+        return NoContent();
+    }
    
 }

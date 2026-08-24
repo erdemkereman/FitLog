@@ -81,4 +81,15 @@ public class ExerciseService : IExerciseService
         return true;
 
     }
+
+    public async Task<bool> DeleteExerciseAsync(int id)
+    {
+        Exercise? exercises = await _exerciseRepository.GetExerciseAsync(id);
+        if (exercises is null)
+        {
+            return false;
+        }
+        await _exerciseRepository.DeleteExerciseAsync(exercises);
+        return true;
+    }
 }
