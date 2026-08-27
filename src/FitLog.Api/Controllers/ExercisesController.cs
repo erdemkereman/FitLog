@@ -63,5 +63,4 @@ public class ExercisesController: ControllerBase
         }
         return NoContent();
     }
-   
 }

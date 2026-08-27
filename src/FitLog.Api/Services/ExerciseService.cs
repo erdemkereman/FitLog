@@ -47,49 +47,49 @@ public class ExerciseService : IExerciseService
 
     public async Task<ExerciseDto?> GetExerciseByIdAsync(int id)
     {
-        Exercise? exercises = await _exerciseRepository.GetExerciseAsync(id);
-        if (exercises is null)
+        Exercise? exercise = await _exerciseRepository.GetExerciseAsync(id);
+        if (exercise is null)
         {
             return null;
         }
 
         ExerciseDto exerciseDto = new ExerciseDto()
         {
-            Id =  exercises.Id,
-            Name = exercises.Name,
-            MuscleGroup = exercises.MuscleGroup,
-            ExerciseType = exercises.ExerciseType,
-            EquipmentType = exercises.EquipmentType,
-            TutorialUrl = exercises.TutorialUrl
+            Id =  exercise.Id,
+            Name = exercise.Name,
+            MuscleGroup = exercise.MuscleGroup,
+            ExerciseType = exercise.ExerciseType,
+            EquipmentType = exercise.EquipmentType,
+            TutorialUrl = exercise.TutorialUrl
         };
         return exerciseDto;
     }
 
     public async Task<bool> UpdateExerciseAsync(int id,UpdateExerciseDto dto)
     {
-        Exercise? exercises = await _exerciseRepository.GetExerciseAsync(id);
-        if (exercises is null)
+        Exercise? exercise = await _exerciseRepository.GetExerciseAsync(id);
+        if (exercise is null)
         {
             return false;
         }
-        exercises.Name = dto.Name;
-        exercises.MuscleGroup = dto.MuscleGroup;
-        exercises.ExerciseType = dto.ExerciseType;
-        exercises.EquipmentType = dto.EquipmentType;
-        exercises.TutorialUrl = dto.TutorialUrl;
-        await _exerciseRepository.UpdateExerciseAsync(exercises);
+        exercise.Name = dto.Name;
+        exercise.MuscleGroup = dto.MuscleGroup;
+        exercise.ExerciseType = dto.ExerciseType;
+        exercise.EquipmentType = dto.EquipmentType;
+        exercise.TutorialUrl = dto.TutorialUrl;
+        await _exerciseRepository.UpdateExerciseAsync(exercise);
         return true;
 
     }
 
     public async Task<bool> DeleteExerciseAsync(int id)
     {
-        Exercise? exercises = await _exerciseRepository.GetExerciseAsync(id);
-        if (exercises is null)
+        Exercise? exercise = await _exerciseRepository.GetExerciseAsync(id);
+        if (exercise is null)
         {
             return false;
         }
-        await _exerciseRepository.DeleteExerciseAsync(exercises);
+        await _exerciseRepository.DeleteExerciseAsync(exercise);
         return true;
     }
 }

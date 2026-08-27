@@ -1,4 +1,5 @@
 using FitLog.Api.Data;
+using FitLog.Api.ExceptionHandling;
 using FitLog.Api.Interfaces;
 using FitLog.Api.Repositories;
 using FitLog.Api.Services;
@@ -14,8 +15,12 @@ builder.Services.AddDbContext<FitLogDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddOpenApi();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 
 var app = builder.Build();
+app.UseExceptionHandler();
 
 // Middleware
 if (app.Environment.IsDevelopment())
