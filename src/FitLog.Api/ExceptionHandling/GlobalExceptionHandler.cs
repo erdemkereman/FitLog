@@ -20,6 +20,8 @@ public class GlobalExceptionHandler:IExceptionHandler
             problemDetails,
             cancellationToken);
 
+        Console.WriteLine(exception);
+
         return true;
     }
 }
