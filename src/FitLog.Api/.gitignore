@@ -1,0 +1,11 @@
+﻿# Build
+bin/
+obj/
+
+# IDE
+.idea/
+.vs/
+
+# Local configuration / secrets
+appsettings.Development.json
+appsettings.Local.json
