@@ -30,4 +30,16 @@ public class WorkoutRepository:IWorkoutRepository
         Workout? workout = await _context.Workouts.FindAsync(id);
         return workout;
     }
+
+    public Task UpdateWorkoutAsync(Workout workout)
+    {
+        _context.Workouts.Update(workout);
+        return _context.SaveChangesAsync();
+    }
+
+    public Task DeleteWorkoutAsync(Workout workout)
+    {
+        _context.Workouts.Remove(workout);
+        return _context.SaveChangesAsync();
+    }
 }

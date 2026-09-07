@@ -58,4 +58,34 @@ public class WorkoutService:IWorkoutService
 
         return workoutDto;
     }
+
+    public async Task<bool> UpdateWorkoutAsync(int id,UpdateWorkoutDto updateWorkoutDto)
+    {
+        Workout? workout = await _workoutRepository.GetWorkoutByIdAsync(id);
+
+        if (workout is null)
+        {
+            return false;
+        }
+        
+        workout.Name=updateWorkoutDto.Name;
+        workout.Description = updateWorkoutDto.Description;
+        workout.WorkoutDate = updateWorkoutDto.WorkoutDate;
+
+        _workoutRepository.UpdateWorkoutAsync(workout);
+        return true;
+    }
+
+    public async Task<bool> DeleteWorkoutAsync(int id)
+    {
+        Workout? workout = await _workoutRepository.GetWorkoutByIdAsync(id);
+
+        if (workout is null)
+        {
+            return false;
+        }
+        
+       await _workoutRepository.DeleteWorkoutAsync(workout);
+        return true;
+    }
 }

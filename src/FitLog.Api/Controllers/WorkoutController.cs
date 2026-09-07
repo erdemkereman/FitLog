@@ -42,4 +42,30 @@ public class WorkoutController:ControllerBase
         }
         return Ok(workout);
     }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateWorkoutAsync([FromRoute] int id, UpdateWorkoutDto updateWorkoutDto)
+    {
+        bool isUpdated = await _workoutService.UpdateWorkoutAsync(id, updateWorkoutDto);
+
+        if (!isUpdated)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteWorkoutAsync(int id)
+    {
+        bool isDeleted = await _workoutService.DeleteWorkoutAsync(id);
+        
+        if (!isDeleted)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
 }

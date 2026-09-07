@@ -10,4 +10,8 @@ public interface IWorkoutService
     
     Task<WorkoutDto?> GetWorkoutByIdAsync(int id);
     
+    Task<bool> UpdateWorkoutAsync(int id,UpdateWorkoutDto updateWorkoutDto);
+    
+    Task<bool> DeleteWorkoutAsync(int id);
+    
 }
