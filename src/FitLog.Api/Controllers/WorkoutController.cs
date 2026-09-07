@@ -35,7 +35,7 @@ public class WorkoutController:ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetWorkoutAsync(int id)
     {
-        WorkoRutDto? workout = await _workoutService.GetWorkoutByIdAsync(id);
+        WorkoutDto? workout = await _workoutService.GetWorkoutByIdAsync(id);
         if (workout == null)
         {
             return NotFound();
