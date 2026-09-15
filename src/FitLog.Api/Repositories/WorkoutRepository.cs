@@ -42,4 +42,19 @@ public class WorkoutRepository:IWorkoutRepository
         _context.Workouts.Remove(workout);
         return _context.SaveChangesAsync();
     }
+
+    public Task AddWorkoutExerciseAsync(WorkoutExercise workoutExercise)
+    {
+        _context.WorkoutExercises.Add(workoutExercise);
+        return _context.SaveChangesAsync();
+    }
+    
+    public async Task<bool> WorkoutExerciseExistsAsync(
+        int workoutId,
+        int exerciseId)
+    {
+        return await _context.WorkoutExercises.AnyAsync(x =>
+            x.WorkoutId == workoutId &&
+            x.ExerciseId == exerciseId);
+    }
 }

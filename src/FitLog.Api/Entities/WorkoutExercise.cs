@@ -6,7 +6,7 @@ public class WorkoutExercise
     public int WorkoutId { get; set; }
     public int ExerciseId { get; set; }
     public double Weight { get; set; }
-    public int RepetititonCount { get; set; }
+    public int RepetitionCount { get; set; }
     public int SetCount { get; set; }
     
     public Workout Workout { get; set; } = null!;

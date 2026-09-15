@@ -1,5 +1,6 @@
 ﻿using FitLog.Api.Dtos;
 using FitLog.Api.Entities;
+using FitLog.Api.Enum;
 using FitLog.Api.Interfaces;
 using FitLog.Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -64,6 +65,33 @@ public class WorkoutController:ControllerBase
         if (!isDeleted)
         {
             return NotFound();
+        }
+
+        return NoContent();
+    }
+    
+    [HttpPost("{workoutId}/exercises")]
+    public async Task<IActionResult> AddExerciseToWorkout(
+        int workoutId,
+        AddExerciseToWorkoutDto addExerciseToWorkoutDto)
+    {
+        AddExerciseToWorkoutResult result =
+            await _workoutService.CreateWorkoutExerciseAsync(
+                workoutId,
+                addExerciseToWorkoutDto);
+
+        if (result == AddExerciseToWorkoutResult.WorkoutNotFound)
+        {
+            return NotFound("Workout bulunamadı.");
+        }
+
+        if (result == AddExerciseToWorkoutResult.ExerciseNotFound)
+        {
+            return NotFound("Exercise bulunamadı.");
+        }
+        if (result == AddExerciseToWorkoutResult.AlreadyExists)
+        {
+            return Conflict("Bu exercise zaten workout'a eklenmiş.");
         }
 
         return NoContent();

@@ -1,5 +1,6 @@
 ﻿using FitLog.Api.Dtos;
 using FitLog.Api.Entities;
+using FitLog.Api.Enum;
 using FitLog.Api.Interfaces;
 using FitLog.Api.Repositories;
 
@@ -8,10 +9,12 @@ namespace FitLog.Api.Services;
 public class WorkoutService:IWorkoutService
 {
     private readonly IWorkoutRepository _workoutRepository;
-
-    public WorkoutService(IWorkoutRepository workoutRepository)
+    private readonly IExerciseRepository _exerciseRepository;
+    
+    public WorkoutService(IExerciseRepository exerciseRepository,IWorkoutRepository workoutRepository)
     {
         _workoutRepository = workoutRepository;
+        _exerciseRepository = exerciseRepository;
     }
     
     public async Task CreateWorkoutAsync(WorkoutDto dto)
@@ -87,5 +90,50 @@ public class WorkoutService:IWorkoutService
         
        await _workoutRepository.DeleteWorkoutAsync(workout);
         return true;
+    }
+
+    public async Task<AddExerciseToWorkoutResult> CreateWorkoutExerciseAsync(
+        int workoutId,
+        AddExerciseToWorkoutDto addExerciseToWorkoutDto)
+    {
+        Workout? workout =
+            await _workoutRepository.GetWorkoutByIdAsync(workoutId);
+
+        if (workout is null)
+        {
+            return AddExerciseToWorkoutResult.WorkoutNotFound;
+        }
+
+        Exercise? exercise =
+            await _exerciseRepository.GetExerciseAsync(
+                addExerciseToWorkoutDto.ExerciseId);
+
+        if (exercise is null)
+        {
+            return AddExerciseToWorkoutResult.ExerciseNotFound;
+        }
+       
+        bool alreadyExists =
+            await _workoutRepository.WorkoutExerciseExistsAsync(
+                workoutId,
+                addExerciseToWorkoutDto.ExerciseId);
+
+        if (alreadyExists)
+        {
+            return AddExerciseToWorkoutResult.AlreadyExists;
+        }
+        
+        WorkoutExercise workoutExercise = new WorkoutExercise
+        {
+            WorkoutId = workout.Id,
+            ExerciseId = exercise.Id,
+            Weight = addExerciseToWorkoutDto.Weight,
+            RepetitionCount = addExerciseToWorkoutDto.RepetitionCount,
+            SetCount = addExerciseToWorkoutDto.SetCount
+        };
+
+        await _workoutRepository.AddWorkoutExerciseAsync(workoutExercise);
+
+        return AddExerciseToWorkoutResult.Success;
     }
 }
