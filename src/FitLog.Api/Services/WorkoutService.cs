@@ -136,4 +136,29 @@ public class WorkoutService:IWorkoutService
 
         return AddExerciseToWorkoutResult.Success;
     }
+    public async Task<List<WorkoutExerciseDto>?> GetWorkoutExercisesAsync(int workoutId)
+    {
+        Workout? workout =
+            await _workoutRepository.GetWorkoutByIdAsync(workoutId);
+
+        if (workout is null)
+        {
+            return null;
+        }
+
+        List<WorkoutExercise> workoutExercises =
+            await _workoutRepository.GetWorkoutExercisesAsync(workoutId);
+
+        List<WorkoutExerciseDto> workoutExerciseDtos =
+            workoutExercises.Select(x => new WorkoutExerciseDto
+            {
+                ExerciseId = x.ExerciseId,
+                ExerciseName = x.Exercise.Name,
+                Weight = x.Weight,
+                RepetitionCount = x.RepetitionCount,
+                SetCount = x.SetCount
+            }).ToList();
+
+        return workoutExerciseDtos;
+    }
 }

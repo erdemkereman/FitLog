@@ -18,5 +18,5 @@ public interface IWorkoutService
     Task<AddExerciseToWorkoutResult> CreateWorkoutExerciseAsync(
         int workoutId,
         AddExerciseToWorkoutDto addExerciseToWorkoutDto);
-    
+    Task<List<WorkoutExerciseDto>?> GetWorkoutExercisesAsync(int workoutId);
 }

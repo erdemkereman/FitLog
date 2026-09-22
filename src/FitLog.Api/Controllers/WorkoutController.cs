@@ -96,4 +96,17 @@ public class WorkoutController:ControllerBase
 
         return NoContent();
     }
+
+    [HttpGet("{workoutId}/exercises")]
+    public async Task<IActionResult> GetWorkoutExercisesAsync(int workoutId)
+    {
+        
+        List<WorkoutExerciseDto> workoutExerciseDtos = await _workoutService.GetWorkoutExercisesAsync(workoutId);
+        if (workoutExerciseDtos is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(workoutExerciseDtos); 
+    }
 }

@@ -57,4 +57,13 @@ public class WorkoutRepository:IWorkoutRepository
             x.WorkoutId == workoutId &&
             x.ExerciseId == exerciseId);
     }
+
+    public async Task<List<WorkoutExercise>> GetWorkoutExercisesAsync(int workoutId)
+    {
+        List<WorkoutExercise> workoutExercises = await _context.WorkoutExercises.Where(x => x.WorkoutId == workoutId)
+            .Include(x => x.Exercise).ToListAsync();
+        
+        return workoutExercises;
+        
+    }
 }
