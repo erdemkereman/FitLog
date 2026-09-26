@@ -19,4 +19,9 @@ public interface IWorkoutService
         int workoutId,
         AddExerciseToWorkoutDto addExerciseToWorkoutDto);
     Task<List<WorkoutExerciseDto>?> GetWorkoutExercisesAsync(int workoutId);
+    
+    Task<bool> UpdateWorkoutExerciseAsync(
+        int workoutId,
+        int exerciseId,
+        UpdateWorkoutExerciseDto dto);
 }

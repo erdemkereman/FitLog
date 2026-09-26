@@ -12,5 +12,8 @@ public interface IWorkoutRepository
     Task AddWorkoutExerciseAsync(WorkoutExercise workoutExercise);
     Task<bool> WorkoutExerciseExistsAsync(int workoutId, int exerciseId);
     Task <List<WorkoutExercise>> GetWorkoutExercisesAsync(int workoutId);
+    Task UpdateWorkoutExerciseAsync(WorkoutExercise workoutExercise);
+    Task<WorkoutExercise?> GetWorkoutExerciseAsync(
+        int workoutId, int exerciseId);
    
 }

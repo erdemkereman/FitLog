@@ -109,4 +109,24 @@ public class WorkoutController:ControllerBase
 
         return Ok(workoutExerciseDtos); 
     }
+    
+    [HttpPut("{workoutId}/exercises/{exerciseId}")]
+    public async Task<IActionResult> UpdateWorkoutExerciseAsync(
+        int workoutId,
+        int exerciseId,
+        UpdateWorkoutExerciseDto dto)
+    {
+        bool isUpdated =
+            await _workoutService.UpdateWorkoutExerciseAsync(
+                workoutId,
+                exerciseId,
+                dto);
+
+        if (!isUpdated)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
 }

@@ -66,4 +66,18 @@ public class WorkoutRepository:IWorkoutRepository
         return workoutExercises;
         
     }
+
+    public Task UpdateWorkoutExerciseAsync(WorkoutExercise workoutExercise)
+    {
+        _context.WorkoutExercises.Update(workoutExercise);
+        return _context.SaveChangesAsync();
+    }
+    public async Task<WorkoutExercise?> GetWorkoutExerciseAsync(
+        int workoutId, int exerciseId)
+    {
+        return await _context.WorkoutExercises
+            .FirstOrDefaultAsync(x =>
+                x.WorkoutId == workoutId &&
+                x.ExerciseId == exerciseId);
+    }
 }

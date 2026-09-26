@@ -161,4 +161,29 @@ public class WorkoutService:IWorkoutService
 
         return workoutExerciseDtos;
     }
+    
+    public async Task<bool> UpdateWorkoutExerciseAsync(
+        int workoutId,
+        int exerciseId,
+        UpdateWorkoutExerciseDto dto)
+    {
+        WorkoutExercise? workoutExercise =
+            await _workoutRepository.GetWorkoutExerciseAsync(
+                workoutId,
+                exerciseId);
+
+        if (workoutExercise is null)
+        {
+            return false;
+        }
+
+        workoutExercise.Weight = dto.Weight;
+        workoutExercise.RepetitionCount = dto.RepetitionCount;
+        workoutExercise.SetCount = dto.SetCount;
+
+        await _workoutRepository.UpdateWorkoutExerciseAsync(workoutExercise);
+
+        return true;
+    }
+   
 }
