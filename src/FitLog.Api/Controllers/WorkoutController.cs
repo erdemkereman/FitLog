@@ -129,4 +129,22 @@ public class WorkoutController:ControllerBase
 
         return NoContent();
     }
+    
+    [HttpDelete("{workoutId}/exercises/{exerciseId}")]
+    public async Task<IActionResult> DeleteWorkoutExerciseAsync(
+        int workoutId,
+        int exerciseId)
+    {
+        bool isDeleted =
+            await _workoutService.DeleteWorkoutExerciseAsync(
+                workoutId,
+                exerciseId);
+
+        if (!isDeleted)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
 }

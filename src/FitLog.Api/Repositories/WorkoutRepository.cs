@@ -80,4 +80,11 @@ public class WorkoutRepository:IWorkoutRepository
                 x.WorkoutId == workoutId &&
                 x.ExerciseId == exerciseId);
     }
+    
+    public Task DeleteWorkoutExerciseAsync(WorkoutExercise workoutExercise)
+    {
+        _context.WorkoutExercises.Remove(workoutExercise);
+
+        return _context.SaveChangesAsync();
+    }
 }

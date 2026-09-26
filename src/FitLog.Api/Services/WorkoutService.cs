@@ -185,5 +185,24 @@ public class WorkoutService:IWorkoutService
 
         return true;
     }
+    
+    public async Task<bool> DeleteWorkoutExerciseAsync(
+        int workoutId,
+        int exerciseId)
+    {
+        WorkoutExercise? workoutExercise =
+            await _workoutRepository.GetWorkoutExerciseAsync(
+                workoutId,
+                exerciseId);
+
+        if (workoutExercise is null)
+        {
+            return false;
+        }
+
+        await _workoutRepository.DeleteWorkoutExerciseAsync(workoutExercise);
+
+        return true;
+    }
    
 }
