@@ -7,3 +7,9 @@ public enum AddExerciseToWorkoutResult
     ExerciseNotFound,
     AlreadyExists
 }
+public enum AddWorkoutSetResult
+{
+    Success,
+    WorkoutExerciseNotFound,
+    AlreadyExists
+}

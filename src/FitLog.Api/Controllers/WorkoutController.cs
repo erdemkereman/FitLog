@@ -147,4 +147,33 @@ public class WorkoutController:ControllerBase
 
         return NoContent();
     }
+
+    [HttpPost("{workoutId}/exercises/{exerciseId}/sets")]
+    public async Task<IActionResult> AddExerciseToWorkoutSetAsync(int workoutId, int exerciseId,
+        CreateWorkoutSetDto createWorkoutSetDto)
+    {
+        AddWorkoutSetResult result =
+            await _workoutService.CreateWorkoutSetAsync(
+                workoutId,
+                exerciseId,
+                createWorkoutSetDto);
+        
+        if (result == AddWorkoutSetResult.WorkoutExerciseNotFound)
+        {
+            return NotFound("Workout bulunamadı.");
+        }
+        
+        if (result == AddWorkoutSetResult.AlreadyExists)
+        {
+            return Conflict("Bu exercise zaten workout'a eklenmiş.");
+        }
+        
+        if (result == AddWorkoutSetResult.Success)
+        {
+            return StatusCode(201);
+        }
+
+        return NoContent();
+        
+    }
 }

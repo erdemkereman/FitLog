@@ -25,4 +25,9 @@ public interface IWorkoutService
         int exerciseId,
         UpdateWorkoutExerciseDto dto);
     Task<bool> DeleteWorkoutExerciseAsync(int workoutId, int exerciseId);
+    
+    Task<AddWorkoutSetResult> CreateWorkoutSetAsync(
+        int workoutId,
+        int exerciseId,
+        CreateWorkoutSetDto dto);
 }

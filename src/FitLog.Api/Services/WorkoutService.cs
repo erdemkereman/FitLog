@@ -204,5 +204,37 @@ public class WorkoutService:IWorkoutService
 
         return true;
     }
-   
+
+    public async Task<AddWorkoutSetResult> CreateWorkoutSetAsync(int workoutId, int exerciseId, CreateWorkoutSetDto dto)
+    {
+        WorkoutExercise workoutExercise = await _workoutRepository.GetWorkoutExerciseAsync(workoutId, exerciseId);
+
+        if (workoutExercise is null)
+        {
+            return AddWorkoutSetResult.WorkoutExerciseNotFound;
+        }
+        
+        bool setAlreadyExists =
+            await _workoutRepository.WorkoutSetExistsAsync(
+                workoutExercise.Id,
+                dto.SetNumber);
+
+        if (setAlreadyExists is true )
+        {
+            return AddWorkoutSetResult.AlreadyExists;
+        }
+
+        WorkoutSet workoutSet = new WorkoutSet
+        {
+            WorkoutExerciseId = workoutExercise.Id,
+            SetNumber = dto.SetNumber,
+            Weight = dto.Weight,
+            RepetitionCount = dto.RepetitionCount,
+        };
+
+        await _workoutRepository.AddWorkoutSetAsync(workoutSet);
+
+        return AddWorkoutSetResult.Success;
+    }
+    
 }

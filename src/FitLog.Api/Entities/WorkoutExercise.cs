@@ -12,4 +12,7 @@ public class WorkoutExercise
     public Workout Workout { get; set; } = null!;
     public Exercise Exercise { get; set; } = null!;
     
+    public ICollection<WorkoutSet> WorkoutSets { get; set; }
+        = new List<WorkoutSet>();
+    
 }
