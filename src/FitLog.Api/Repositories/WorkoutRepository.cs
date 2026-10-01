@@ -129,4 +129,10 @@ public class WorkoutRepository:IWorkoutRepository
             x.SetNumber == setNumber &&
             x.Id != workoutSetId);
     }
+
+    public Task DeleteWorkoutSetAsync(WorkoutSet workoutSet)
+    {
+        _context.WorkoutSets.Remove(workoutSet);
+        return _context.SaveChangesAsync();
+    }
 }

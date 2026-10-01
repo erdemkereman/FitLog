@@ -211,5 +211,17 @@ public class WorkoutController:ControllerBase
 
         return NoContent();
     }
+    [HttpDelete("{workoutId}/exercises/{exerciseId}/sets/{setId}")]
+    public async Task<IActionResult> DeleteWorkoutSetAsync(int setId)
+    {
+        bool result = await _workoutService.DeleteWorkoutSetAsync(setId);
+
+        if (!result)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
     
 }

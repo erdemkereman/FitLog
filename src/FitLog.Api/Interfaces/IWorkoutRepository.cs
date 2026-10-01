@@ -25,4 +25,5 @@ public interface IWorkoutRepository
         int workoutExerciseId,
         int setNumber,
         int workoutSetId);
+    Task DeleteWorkoutSetAsync(WorkoutSet workoutSet);
 }

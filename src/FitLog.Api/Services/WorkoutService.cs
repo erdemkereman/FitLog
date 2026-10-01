@@ -291,5 +291,16 @@ public class WorkoutService:IWorkoutService
 
         return UpdateWorkoutSetResult.Success;
     }
-    
+
+    public async Task<bool> DeleteWorkoutSetAsync(int workoutSetId)
+    {
+        WorkoutSet? workoutSet = await _workoutRepository.GetWorkoutSetAsync(workoutSetId);
+        if (workoutSet is null)
+        {
+            return false;
+        }
+        
+        await _workoutRepository.DeleteWorkoutSetAsync(workoutSet);
+        return true;
+    }
 }
