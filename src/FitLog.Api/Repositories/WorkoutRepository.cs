@@ -100,4 +100,11 @@ public class WorkoutRepository:IWorkoutRepository
             x.WorkoutExerciseId == workoutExerciseId &&
             x.SetNumber == setNumber);
     }
+
+    public async Task<List<WorkoutSet>> GetWorkoutSetsAsync(int workoutExerciseId)
+    {
+        List<WorkoutSet> workoutSets = await _context.WorkoutSets.Where(x =>x.WorkoutExerciseId==workoutExerciseId).OrderBy(x=>x.SetNumber).ToListAsync();
+        return workoutSets;
+
+    }
 }

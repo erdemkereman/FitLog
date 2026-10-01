@@ -30,4 +30,8 @@ public interface IWorkoutService
         int workoutId,
         int exerciseId,
         CreateWorkoutSetDto dto);
+    
+    Task<List<WorkoutSetDto>?> GetWorkoutSetsAsync(
+        int workoutId,
+        int exerciseId);
 }

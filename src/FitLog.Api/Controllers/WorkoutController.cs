@@ -176,4 +176,17 @@ public class WorkoutController:ControllerBase
         return NoContent();
         
     }
+
+    [HttpGet("{workoutId}/exercises/{exerciseId}/sets")]
+    public async Task<IActionResult> GetWorkoutExerciseSetsAsync(int workoutId, int exerciseId)
+    {
+        List<WorkoutSetDto>? workoutSets = await _workoutService.GetWorkoutSetsAsync(workoutId, exerciseId);
+        
+        if (workoutSets is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(workoutSets); 
+    } 
 }

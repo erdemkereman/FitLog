@@ -1,0 +1,9 @@
+﻿namespace FitLog.Api.Dtos;
+
+public class WorkoutSetDto
+{
+    public int Id { get; set; }
+    public int SetNumber { get; set; }
+    public double Weight { get; set; }
+    public int RepetitionCount { get; set; }
+}
