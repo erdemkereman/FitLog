@@ -110,7 +110,7 @@ public class WorkoutRepository:IWorkoutRepository
 
     public async Task<WorkoutSet?> GetWorkoutSetAsync(int workoutSetId)
     {
-        WorkoutSet? workoutSet = _context.WorkoutSets.Find(workoutSetId);
+        WorkoutSet? workoutSet = await _context.WorkoutSets.FindAsync(workoutSetId);
         return workoutSet;
     }
 
