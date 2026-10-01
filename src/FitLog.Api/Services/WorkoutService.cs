@@ -2,7 +2,6 @@
 using FitLog.Api.Entities;
 using FitLog.Api.Enum;
 using FitLog.Api.Interfaces;
-using FitLog.Api.Repositories;
 
 namespace FitLog.Api.Services;
 
@@ -75,7 +74,7 @@ public class WorkoutService:IWorkoutService
         workout.Description = updateWorkoutDto.Description;
         workout.WorkoutDate = updateWorkoutDto.WorkoutDate;
 
-        _workoutRepository.UpdateWorkoutAsync(workout);
+        await _workoutRepository.UpdateWorkoutAsync(workout);
         return true;
     }
 
@@ -207,7 +206,7 @@ public class WorkoutService:IWorkoutService
 
     public async Task<AddWorkoutSetResult> CreateWorkoutSetAsync(int workoutId, int exerciseId, CreateWorkoutSetDto dto)
     {
-        WorkoutExercise workoutExercise = await _workoutRepository.GetWorkoutExerciseAsync(workoutId, exerciseId);
+        WorkoutExercise? workoutExercise = await _workoutRepository.GetWorkoutExerciseAsync(workoutId, exerciseId);
 
         if (workoutExercise is null)
         {
@@ -261,4 +260,36 @@ public class WorkoutService:IWorkoutService
 
         return workoutSetDtos;
     }
+    public async Task<UpdateWorkoutSetResult> UpdateWorkoutSetAsync(
+        int workoutSetId,
+        UpdateWorkoutSetDto dto)
+    {
+        WorkoutSet? workoutSet =
+            await _workoutRepository.GetWorkoutSetAsync(workoutSetId);
+
+        if (workoutSet is null)
+        {
+            return UpdateWorkoutSetResult.WorkoutSetNotFound;
+        }
+
+        bool setAlreadyExists =
+            await _workoutRepository.WorkoutSetExistsForUpdateAsync(
+                workoutSet.WorkoutExerciseId,
+                dto.SetNumber,
+                workoutSetId);
+
+        if (setAlreadyExists)
+        {
+            return UpdateWorkoutSetResult.AlreadyExists;
+        }
+
+        workoutSet.SetNumber = dto.SetNumber;
+        workoutSet.Weight = dto.Weight;
+        workoutSet.RepetitionCount = dto.RepetitionCount;
+
+        await _workoutRepository.UpdateWorkoutSetAsync(workoutSet);
+
+        return UpdateWorkoutSetResult.Success;
+    }
+    
 }

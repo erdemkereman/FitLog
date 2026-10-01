@@ -34,4 +34,8 @@ public interface IWorkoutService
     Task<List<WorkoutSetDto>?> GetWorkoutSetsAsync(
         int workoutId,
         int exerciseId);
+
+    Task<UpdateWorkoutSetResult> UpdateWorkoutSetAsync(
+        int workoutSetId,
+        UpdateWorkoutSetDto dto);
 }

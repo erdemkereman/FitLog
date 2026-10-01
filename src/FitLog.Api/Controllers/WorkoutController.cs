@@ -188,5 +188,28 @@ public class WorkoutController:ControllerBase
         }
 
         return Ok(workoutSets); 
-    } 
+    }
+    [HttpPut("{workoutId}/exercises/{exerciseId}/sets/{setId}")]
+    public async Task<IActionResult> UpdateWorkoutSetAsync(
+        int workoutId,
+        int exerciseId,
+        int setId,
+        UpdateWorkoutSetDto dto)
+    {
+        UpdateWorkoutSetResult result =
+            await _workoutService.UpdateWorkoutSetAsync(setId, dto);
+
+        if (result == UpdateWorkoutSetResult.WorkoutSetNotFound)
+        {
+            return NotFound();
+        }
+
+        if (result == UpdateWorkoutSetResult.AlreadyExists)
+        {
+            return Conflict("Bu set numarası zaten mevcut.");
+        }
+
+        return NoContent();
+    }
+    
 }

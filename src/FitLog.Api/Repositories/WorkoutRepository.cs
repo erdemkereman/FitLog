@@ -107,4 +107,26 @@ public class WorkoutRepository:IWorkoutRepository
         return workoutSets;
 
     }
+
+    public async Task<WorkoutSet?> GetWorkoutSetAsync(int workoutSetId)
+    {
+        WorkoutSet? workoutSet = _context.WorkoutSets.Find(workoutSetId);
+        return workoutSet;
+    }
+
+    public Task UpdateWorkoutSetAsync(WorkoutSet workoutSet)
+    {
+        _context.WorkoutSets.Update(workoutSet);
+        return _context.SaveChangesAsync();
+    }
+    public async Task<bool> WorkoutSetExistsForUpdateAsync(
+        int workoutExerciseId,
+        int setNumber,
+        int workoutSetId)
+    {
+        return await _context.WorkoutSets.AnyAsync(x =>
+            x.WorkoutExerciseId == workoutExerciseId &&
+            x.SetNumber == setNumber &&
+            x.Id != workoutSetId);
+    }
 }
