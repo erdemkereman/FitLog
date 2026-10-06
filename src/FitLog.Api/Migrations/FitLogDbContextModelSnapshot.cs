@@ -113,6 +113,30 @@ namespace FitLog.Api.Migrations
                     b.ToTable("WorkoutExercises");
                 });
 
+            modelBuilder.Entity("FitLog.Api.Entities.WorkoutSession", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("WorkoutId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkoutId");
+
+                    b.ToTable("WorkoutSessions");
+                });
+
             modelBuilder.Entity("FitLog.Api.Entities.WorkoutSet", b =>
                 {
                     b.Property<int>("Id")
@@ -159,6 +183,17 @@ namespace FitLog.Api.Migrations
                     b.Navigation("Workout");
                 });
 
+            modelBuilder.Entity("FitLog.Api.Entities.WorkoutSession", b =>
+                {
+                    b.HasOne("FitLog.Api.Entities.Workout", "Workout")
+                        .WithMany("WorkoutSession")
+                        .HasForeignKey("WorkoutId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Workout");
+                });
+
             modelBuilder.Entity("FitLog.Api.Entities.WorkoutSet", b =>
                 {
                     b.HasOne("FitLog.Api.Entities.WorkoutExercise", "WorkoutExercise")
@@ -178,6 +213,8 @@ namespace FitLog.Api.Migrations
             modelBuilder.Entity("FitLog.Api.Entities.Workout", b =>
                 {
                     b.Navigation("WorkoutExercises");
+
+                    b.Navigation("WorkoutSession");
                 });
 
             modelBuilder.Entity("FitLog.Api.Entities.WorkoutExercise", b =>

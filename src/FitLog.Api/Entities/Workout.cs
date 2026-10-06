@@ -9,5 +9,7 @@ public class Workout
     public DateTime CreatedAt { get; set; }
 
     public ICollection<WorkoutExercise> WorkoutExercises { get; set; } = new List<WorkoutExercise>();
+    public ICollection<WorkoutSession> WorkoutSession { get; set; }
+        = new List<WorkoutSession>();
     
 }
