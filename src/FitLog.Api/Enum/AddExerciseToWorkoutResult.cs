@@ -20,3 +20,9 @@ public enum UpdateWorkoutSetResult
     WorkoutSetNotFound,
     AlreadyExists
 }
+
+public enum CreateWorkoutSessionResult
+{
+    Success,
+    WorkoutNotFound
+}
