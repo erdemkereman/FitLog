@@ -8,5 +8,7 @@ public class WorkoutSession
     public DateTime? CompletedAt { get; set; }
     
     public Workout Workout { get; set; } = null!;
+    public ICollection<SessionExercise> SessionExercises { get; set; }
+        = new List<SessionExercise>();
     
 }

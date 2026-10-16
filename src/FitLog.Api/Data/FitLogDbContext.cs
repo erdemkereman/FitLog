@@ -16,4 +16,5 @@ public class FitLogDbContext : DbContext
     public DbSet<WorkoutSet> WorkoutSets { get; set; }
     
     public DbSet<WorkoutSession> WorkoutSessions { get; set; }
+    public DbSet<SessionExercise> SessionExercises { get; set; }
 }

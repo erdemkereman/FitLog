@@ -54,6 +54,29 @@ namespace FitLog.Api.Migrations
                     b.ToTable("Exercises");
                 });
 
+            modelBuilder.Entity("FitLog.Api.Entities.SessionExercise", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ExerciseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WorkoutSessionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.HasIndex("WorkoutSessionId");
+
+                    b.ToTable("SessionExercises");
+                });
+
             modelBuilder.Entity("FitLog.Api.Entities.Workout", b =>
                 {
                     b.Property<int>("Id")
@@ -164,6 +187,25 @@ namespace FitLog.Api.Migrations
                     b.ToTable("WorkoutSets");
                 });
 
+            modelBuilder.Entity("FitLog.Api.Entities.SessionExercise", b =>
+                {
+                    b.HasOne("FitLog.Api.Entities.Exercise", "Exercise")
+                        .WithMany()
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FitLog.Api.Entities.WorkoutSession", "WorkoutSession")
+                        .WithMany("SessionExercises")
+                        .HasForeignKey("WorkoutSessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exercise");
+
+                    b.Navigation("WorkoutSession");
+                });
+
             modelBuilder.Entity("FitLog.Api.Entities.WorkoutExercise", b =>
                 {
                     b.HasOne("FitLog.Api.Entities.Exercise", "Exercise")
@@ -220,6 +262,11 @@ namespace FitLog.Api.Migrations
             modelBuilder.Entity("FitLog.Api.Entities.WorkoutExercise", b =>
                 {
                     b.Navigation("WorkoutSets");
+                });
+
+            modelBuilder.Entity("FitLog.Api.Entities.WorkoutSession", b =>
+                {
+                    b.Navigation("SessionExercises");
                 });
 #pragma warning restore 612, 618
         }
