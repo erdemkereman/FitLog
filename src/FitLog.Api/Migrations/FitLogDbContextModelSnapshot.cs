@@ -77,6 +77,33 @@ namespace FitLog.Api.Migrations
                     b.ToTable("SessionExercises");
                 });
 
+            modelBuilder.Entity("FitLog.Api.Entities.SessionSet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("RepetitionCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SessionExerciseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SetNumber")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Weight")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SessionExerciseId");
+
+                    b.ToTable("SessionSets");
+                });
+
             modelBuilder.Entity("FitLog.Api.Entities.Workout", b =>
                 {
                     b.Property<int>("Id")
@@ -204,6 +231,17 @@ namespace FitLog.Api.Migrations
                     b.Navigation("Exercise");
 
                     b.Navigation("WorkoutSession");
+                });
+
+            modelBuilder.Entity("FitLog.Api.Entities.SessionSet", b =>
+                {
+                    b.HasOne("FitLog.Api.Entities.SessionExercise", "SessionExercise")
+                        .WithMany()
+                        .HasForeignKey("SessionExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SessionExercise");
                 });
 
             modelBuilder.Entity("FitLog.Api.Entities.WorkoutExercise", b =>
