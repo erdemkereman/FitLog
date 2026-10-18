@@ -1,6 +1,7 @@
 ﻿using FitLog.Api.Dtos;
 using FitLog.Api.Entities;
 using FitLog.Api.Enum;
+using FitLog.Api.Enums;
 using FitLog.Api.Interfaces;
 using WorkoutSession = FitLog.Api.Entities.WorkoutSession;
 
@@ -50,5 +51,27 @@ public class WorkoutSessionService:IWorkoutSessionService
             Result = CreateWorkoutSessionResult.Success,
             Session = responseDto
         };
+    }
+
+    public async Task<CompleteWorkoutSessionResult> CompleteWorkoutSessionAsync(int id)
+    {
+        WorkoutSession? workoutSession = await _workoutSessionRepository.GetWorkoutSessionByIdAsync(id);
+
+        if (workoutSession is null)
+        {
+            return CompleteWorkoutSessionResult.NotFound;
+        }
+
+        if (workoutSession.CompletedAt==null)
+        {
+            workoutSession.CompletedAt=DateTime.UtcNow;
+        }
+        else
+        {
+            return CompleteWorkoutSessionResult.AlreadyCompleted;
+        }
+
+        await _workoutSessionRepository.UpdateWorkoutSessionAsync(workoutSession);
+        return CompleteWorkoutSessionResult.Success;
     }
 }

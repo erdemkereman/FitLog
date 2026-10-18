@@ -1,5 +1,6 @@
 ﻿using FitLog.Api.Dtos;
 using FitLog.Api.Enum;
+using FitLog.Api.Enums;
 using FitLog.Api.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,5 +33,21 @@ public class WorkoutSessionController: ControllerBase
 
             _ => StatusCode(StatusCodes.Status500InternalServerError)
         };
+    }
+
+    [HttpPatch("{id:int}/complete")]
+    public async Task<IActionResult> CompleteWorkoutSession(int id)
+    {
+        CompleteWorkoutSessionResult result= await _workoutSessionService.CompleteWorkoutSessionAsync(id);
+
+        return result switch
+        {
+            CompleteWorkoutSessionResult.Success => Ok("Antrenman başarıyla tamamlandı."),
+            CompleteWorkoutSessionResult.NotFound => NotFound("Antrenman bulunamadı."),
+            CompleteWorkoutSessionResult.AlreadyCompleted => Conflict("Bu antrenman zaten tamamlanmış."),
+            _ => StatusCode(StatusCodes.Status500InternalServerError,
+                "Beklenmeyen bir hata oluştu.")
+        };
+
     }
 }
