@@ -29,4 +29,23 @@ public class WorkoutSessionRepository:IWorkoutSessionRepository
         _context.WorkoutSessions.Update(workoutSession);
         return _context.SaveChangesAsync();
     }
+
+    public Task<List<WorkoutSession>> GetWorkoutSessionHistoryAsync()
+    {
+        return _context.WorkoutSessions.Include(x => x.Workout).Where(x => x.CompletedAt != null).OrderByDescending(x => x.StartedAt).ToListAsync();
+        
+    }
+
+    public Task<WorkoutSession?> GetWorkoutSessionDetailAsync(int id)
+    {
+        Task<WorkoutSession?> workoutSession = _context.WorkoutSessions
+            .Include(x => x.Workout)
+            .Include(x => x.SessionExercises)
+            .ThenInclude(x => x.Exercise)
+            .Include(x => x.SessionExercises).ThenInclude(x => x.SessionSets)
+            .FirstOrDefaultAsync(x => x.Id == id);
+        
+        return workoutSession;
+
+    }
 }

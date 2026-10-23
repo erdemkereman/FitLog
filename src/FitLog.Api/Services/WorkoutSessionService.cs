@@ -74,4 +74,64 @@ public class WorkoutSessionService:IWorkoutSessionService
         await _workoutSessionRepository.UpdateWorkoutSessionAsync(workoutSession);
         return CompleteWorkoutSessionResult.Success;
     }
+
+    public async Task<List<WorkoutSessionHistoryDto>> GetWorkoutSessionHistoryAsync()
+    {
+        List<WorkoutSession> workoutSessions =
+            await _workoutSessionRepository.GetWorkoutSessionHistoryAsync();
+
+        var history = workoutSessions.Select(x => new WorkoutSessionHistoryDto
+        {
+            Id = x.Id,
+            StartedAt = x.StartedAt,
+            CompletedAt = x.CompletedAt,
+            WorkoutName = x.Workout.Name,
+            DurationMinutes = (x.CompletedAt.Value - x.StartedAt).TotalMinutes
+        }).ToList();
+
+        return history;
+    }
+
+    public async Task<WorkoutSessionDetailDto?> GetWorkoutSessionDetailAsync(int id)
+    {
+        WorkoutSession workoutSession = await _workoutSessionRepository.GetWorkoutSessionDetailAsync(id);
+        
+        if (workoutSession is null)
+        {
+            return null;
+        }
+        var detail = new WorkoutSessionDetailDto
+        {
+            Id = workoutSession.Id,
+            WorkoutName = workoutSession.Workout.Name,
+            StartedAt = workoutSession.StartedAt,
+            CompletedAt = workoutSession.CompletedAt,
+
+            DurationMinutes = workoutSession.CompletedAt.HasValue
+                ? (workoutSession.CompletedAt.Value - workoutSession.StartedAt).TotalMinutes
+                : null,
+
+            Exercises = workoutSession.SessionExercises
+                .Select(x => new SessionExerciseDetailDto
+                {
+                    Id = x.Id,
+                    ExerciseId = x.ExerciseId,
+                    ExerciseName = x.Exercise.Name,
+
+                    Sets = x.SessionSets
+                        .OrderBy(s => s.SetNumber)
+                        .Select(s => new SessionSetDetailDto
+                        {
+                            Id = s.Id,
+                            SetNumber = s.SetNumber,
+                            Weight = s.Weight,
+                            RepetitionCount = s.RepetitionCount
+                        })
+                        .ToList()
+                })
+                .ToList()
+        };
+
+        return detail;
+    }
 }

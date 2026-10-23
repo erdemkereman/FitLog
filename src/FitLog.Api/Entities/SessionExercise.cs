@@ -9,4 +9,5 @@ public class SessionExercise
 
     public WorkoutSession WorkoutSession { get; set; } = null!;
     public Exercise Exercise { get; set; } = null!;
+    public ICollection<SessionSet> SessionSets { get; set; } = new List<SessionSet>();
 }

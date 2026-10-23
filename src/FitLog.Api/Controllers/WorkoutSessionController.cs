@@ -50,4 +50,30 @@ public class WorkoutSessionController: ControllerBase
         };
 
     }
+    
+    [HttpGet("history")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetWorkoutSessionHistory()
+    {
+        List<WorkoutSessionHistoryDto> history =
+            await _workoutSessionService.GetWorkoutSessionHistoryAsync();
+
+        return Ok(history);
+    }
+    
+    [HttpGet("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetWorkoutSessionDetail(int id)
+    {
+        WorkoutSessionDetailDto? detail =
+            await _workoutSessionService.GetWorkoutSessionDetailAsync(id);
+
+        if (detail is null)
+        {
+            return NotFound("Antrenman oturumu bulunamadı.");
+        }
+
+        return Ok(detail);
+    }
 }
