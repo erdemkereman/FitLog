@@ -108,10 +108,11 @@ public class WorkoutSessionService:IWorkoutSessionService
             CompletedAt = workoutSession.CompletedAt,
 
             DurationMinutes = workoutSession.CompletedAt.HasValue
-                ? (workoutSession.CompletedAt.Value - workoutSession.StartedAt).TotalMinutes
-                : null,
+                ?Math.Round((workoutSession.CompletedAt.Value - workoutSession.StartedAt).TotalMinutes,1)
+                :null,
 
             Exercises = workoutSession.SessionExercises
+                .OrderBy(x=>x.Id)
                 .Select(x => new SessionExerciseDetailDto
                 {
                     Id = x.Id,
