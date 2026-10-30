@@ -8,6 +8,8 @@ namespace FitLog.Api.Repositories;
 public class WorkoutSessionRepository:IWorkoutSessionRepository
 {
     private FitLogDbContext  _context;
+    private IWorkoutSessionRepository _workoutSessionRepositoryImplementation;
+
     public WorkoutSessionRepository(FitLogDbContext context)
     {
         _context = context;
@@ -47,5 +49,17 @@ public class WorkoutSessionRepository:IWorkoutSessionRepository
         
         return workoutSession;
 
+    }
+
+    public Task<SessionExercise?> GetPreviousExercisePerformanceAsync(int exerciseId)
+    {
+        Task<SessionExercise?> sessionExercise = _context.SessionExercises
+            .Include(x=>x.Exercise)
+            .Include(x=>x.SessionSets)
+            .Include(x => x.WorkoutSession)
+            .Where(x => x.ExerciseId == exerciseId && x.WorkoutSession.CompletedAt != null)
+            .OrderByDescending(x => x.WorkoutSession.CompletedAt)
+            .FirstOrDefaultAsync();
+        return sessionExercise;
     }
 }

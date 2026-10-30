@@ -9,5 +9,6 @@ public interface IWorkoutSessionRepository
     Task UpdateWorkoutSessionAsync(WorkoutSession workoutSession);
     Task<List<WorkoutSession>> GetWorkoutSessionHistoryAsync();
     Task<WorkoutSession?> GetWorkoutSessionDetailAsync(int id);
+    Task<SessionExercise?> GetPreviousExercisePerformanceAsync(int exerciseId);
 
 }

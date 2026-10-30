@@ -135,4 +135,10 @@ public class WorkoutRepository:IWorkoutRepository
         _context.WorkoutSets.Remove(workoutSet);
         return _context.SaveChangesAsync();
     }
+    public async Task<Workout?> GetWorkoutWithExercisesAsync(int workoutId)
+    {
+        return await _context.Workouts
+            .Include(w => w.WorkoutExercises)
+            .FirstOrDefaultAsync(w => w.Id == workoutId);
+    }
 }

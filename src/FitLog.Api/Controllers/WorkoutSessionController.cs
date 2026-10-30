@@ -76,4 +76,19 @@ public class WorkoutSessionController: ControllerBase
 
         return Ok(detail);
     }
+
+    [HttpGet("exercises/{exerciseId:int}/previous-performance")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetWorkoutSessionPreviousPerformance(int exerciseId)
+    {
+        var sessionExercise = await _workoutSessionService.GetPreviousExercisePerformanceAsync(exerciseId);
+
+        if (sessionExercise is null)
+        {
+            return NotFound();
+        }
+        return Ok(sessionExercise);
+    }
+    
 }

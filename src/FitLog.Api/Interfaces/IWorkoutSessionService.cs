@@ -13,4 +13,5 @@ public interface IWorkoutSessionService
     Task<CompleteWorkoutSessionResult> CompleteWorkoutSessionAsync(int id);
     Task<List<WorkoutSessionHistoryDto>> GetWorkoutSessionHistoryAsync();
     Task<WorkoutSessionDetailDto?> GetWorkoutSessionDetailAsync(int id);
+    Task<PreviousExercisePerformanceDto?> GetPreviousExercisePerformanceAsync(int exerciseId);
 }

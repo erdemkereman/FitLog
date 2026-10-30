@@ -21,7 +21,9 @@ public class WorkoutSessionService:IWorkoutSessionService
     public async Task<CreateWorkoutSessionResponse> CreateWorkoutSessionAsync(
         CreateWorkoutSessionDto createWorkoutSessionDto)
     {
-        Workout? workout = await _workoutRepository.GetWorkoutByIdAsync(createWorkoutSessionDto.WorkoutId);
+        Workout? workout = await _workoutRepository
+            .GetWorkoutWithExercisesAsync(createWorkoutSessionDto.WorkoutId);
+
         if (workout is null)
         {
             return new CreateWorkoutSessionResponse
@@ -30,14 +32,24 @@ public class WorkoutSessionService:IWorkoutSessionService
                 Session = null
             };
         }
-       
+
         WorkoutSession workoutSession = new WorkoutSession
         {
-            WorkoutId = createWorkoutSessionDto.WorkoutId,
+            WorkoutId = workout.Id,
             StartedAt = DateTime.UtcNow,
-            CompletedAt = null
+            CompletedAt = null,
+
+            SessionExercises = workout.WorkoutExercises
+                .Select(workoutExercise => new SessionExercise
+                {
+                    ExerciseId = workoutExercise.ExerciseId
+                })
+                .ToList()
         };
-        await _workoutSessionRepository.CreateWorkoutSessionAsync(workoutSession);
+
+        await _workoutSessionRepository
+            .CreateWorkoutSessionAsync(workoutSession);
+
         WorkoutSessionDto responseDto = new WorkoutSessionDto
         {
             Id = workoutSession.Id,
@@ -46,13 +58,14 @@ public class WorkoutSessionService:IWorkoutSessionService
             StartedAt = workoutSession.StartedAt,
             CompletedAt = workoutSession.CompletedAt
         };
+
         return new CreateWorkoutSessionResponse
         {
             Result = CreateWorkoutSessionResult.Success,
             Session = responseDto
         };
     }
-
+    
     public async Task<CompleteWorkoutSessionResult> CompleteWorkoutSessionAsync(int id)
     {
         WorkoutSession? workoutSession = await _workoutSessionRepository.GetWorkoutSessionByIdAsync(id);
@@ -134,5 +147,28 @@ public class WorkoutSessionService:IWorkoutSessionService
         };
 
         return detail;
+    }
+
+    public async Task<PreviousExercisePerformanceDto?> GetPreviousExercisePerformanceAsync(int exerciseId)
+    {
+        var sessionExercise = await _workoutSessionRepository.GetPreviousExercisePerformanceAsync(exerciseId);
+        if (sessionExercise is null)
+        {
+            return null;
+        }
+
+        var result = new PreviousExercisePerformanceDto
+        {
+            ExerciseName = sessionExercise.Exercise.Name,
+            LastWorkoutDate = sessionExercise.WorkoutSession.CompletedAt.Value,
+            SessionSetDetails = sessionExercise.SessionSets.Select(x => new SessionSetDetailDto
+            {
+                Id = x.Id,
+                SetNumber = x.SetNumber,
+                Weight = x.Weight,
+                RepetitionCount = x.RepetitionCount
+            }).OrderBy(x => x.SetNumber).ToList()
+        };
+        return result;
     }
 }
