@@ -19,6 +19,7 @@ builder.Services.AddScoped<ISessionExerciseService, SessionExerciseService>();
 builder.Services.AddScoped<ISessionExerciseRepository, SessionExerciseRepository>();
 builder.Services.AddScoped<ISessionSetService, SessionSetService>();
 builder.Services.AddScoped<ISessionSetRepository, SessionSetRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddDbContext<FitLogDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));

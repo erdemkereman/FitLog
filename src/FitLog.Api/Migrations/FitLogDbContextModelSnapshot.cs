@@ -104,6 +104,37 @@ namespace FitLog.Api.Migrations
                     b.ToTable("SessionSets");
                 });
 
+            modelBuilder.Entity("FitLog.Api.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("FitLog.Api.Entities.Workout", b =>
                 {
                     b.Property<int>("Id")
@@ -236,7 +267,7 @@ namespace FitLog.Api.Migrations
             modelBuilder.Entity("FitLog.Api.Entities.SessionSet", b =>
                 {
                     b.HasOne("FitLog.Api.Entities.SessionExercise", "SessionExercise")
-                        .WithMany()
+                        .WithMany("SessionSets")
                         .HasForeignKey("SessionExerciseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -288,6 +319,11 @@ namespace FitLog.Api.Migrations
             modelBuilder.Entity("FitLog.Api.Entities.Exercise", b =>
                 {
                     b.Navigation("WorkoutExercises");
+                });
+
+            modelBuilder.Entity("FitLog.Api.Entities.SessionExercise", b =>
+                {
+                    b.Navigation("SessionSets");
                 });
 
             modelBuilder.Entity("FitLog.Api.Entities.Workout", b =>
