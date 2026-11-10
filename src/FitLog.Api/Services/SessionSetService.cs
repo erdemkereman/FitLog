@@ -20,12 +20,18 @@ public class SessionSetService:ISessionSetService
     
     public async Task<AddSessionSetResult> AddSessionSetAsync(int sessionExerciseId, CreateSessionSetDto dto)
     {
-        bool sessionExerciseExists = await _context.SessionExercises
-            .AnyAsync(x => x.Id == sessionExerciseId);
+        var sessionExercise = await _context.SessionExercises
+            .Include(x => x.WorkoutSession)
+            .FirstOrDefaultAsync(x => x.Id == sessionExerciseId);
 
-        if (sessionExerciseExists is false)
+        if (sessionExercise == null)
         {
             return AddSessionSetResult.SessionExerciseNotFound;
+        }
+
+        if (sessionExercise.WorkoutSession.CompletedAt !=null)
+        {
+            return AddSessionSetResult.SessionAlreadyCompleted;
         }
         if (dto.SetNumber <= 0 ||
             dto.Weight < 0 ||

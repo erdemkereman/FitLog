@@ -42,6 +42,9 @@ public class SessionSetController : ControllerBase
 
             AddSessionSetResult.AlreadyExists =>
                 Conflict("Bu set numarası bu harekete zaten eklenmiş."),
+            
+            AddSessionSetResult.SessionAlreadyCompleted
+                => Conflict("Tamamlanmış antrenmana yeni set eklenemez."),
 
             _ => StatusCode(StatusCodes.Status500InternalServerError)
         };

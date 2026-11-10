@@ -38,6 +38,10 @@ public class SessionExerciseController : ControllerBase
 
             AddSessionExerciseResult.AlreadyExists =>
                 Conflict("Bu egzersiz session'a zaten eklenmiş."),
+            
+            AddSessionExerciseResult.SessionAlreadyCompleted
+                => Conflict("Tamamlanmış antrenmana yeni hareket eklenemez."),
+            
 
             _ => StatusCode(StatusCodes.Status500InternalServerError)
         };

@@ -24,11 +24,14 @@ public class SessionExerciseService : ISessionExerciseService
         int sessionId,
         CreateSessionExerciseDto dto)
     {
-        bool sessionExists = await _context.WorkoutSessions
-            .AnyAsync(x => x.Id == sessionId);
+        var session = await _context.WorkoutSessions
+            .FirstOrDefaultAsync(x => x.Id == sessionId);
 
-        if (!sessionExists)
+        if (session == null)
             return AddSessionExerciseResult.SessionNotFound;
+
+        if (session.CompletedAt != null)
+            return AddSessionExerciseResult.SessionAlreadyCompleted;
 
         bool exerciseExists = await _context.Exercises
             .AnyAsync(x => x.Id == dto.ExerciseId);

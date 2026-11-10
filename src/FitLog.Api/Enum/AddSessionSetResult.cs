@@ -5,5 +5,6 @@ public enum AddSessionSetResult
     Success,
     SessionExerciseNotFound,
     InvalidSetData,
-    AlreadyExists
+    AlreadyExists,
+    SessionAlreadyCompleted
 }

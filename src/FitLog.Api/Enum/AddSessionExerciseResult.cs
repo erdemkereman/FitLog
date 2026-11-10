@@ -6,5 +6,6 @@ public enum AddSessionExerciseResult
     Success,
     SessionNotFound,
     ExerciseNotFound,
-    AlreadyExists
+    AlreadyExists,
+    SessionAlreadyCompleted
 }
