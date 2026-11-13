@@ -25,6 +25,12 @@ public class UserRepository:IUserRepository
         return user;
     }
 
+    public async Task<User?> GetByUsernameAsync(string username)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(x=>x.Username==username);
+        return user;
+    }
+
     public async Task AddAsync(User user)
     {
         await _context.Users.AddAsync(user);
