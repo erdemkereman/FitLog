@@ -50,4 +50,48 @@ public class AuthService : IAuthService
 
         return RegisterResult.Success;
     }
+
+    public async Task<LoginResult> LoginAsync(LoginRequestDto loginRequestDto)
+    {
+        var identifierControl = loginRequestDto.Identifier.Contains("@");
+
+        User? identifier = null;
+
+        if (identifierControl is true)
+        {
+             identifier=await _userRepository.GetByEmailAsync(loginRequestDto.Identifier);
+        }
+        else
+        {
+            identifier = await _userRepository.GetByUsernameAsync(loginRequestDto.Identifier);
+        }
+
+        if (identifier==null)
+        {
+            return LoginResult.InvalidCredentials;
+        }
+
+        var password = _passwordHasher.VerifyHashedPassword(
+            identifier,
+            identifier.PasswordHash,
+            loginRequestDto.Password
+        );
+
+        switch (password)
+        {
+            case PasswordVerificationResult.Success:
+                return LoginResult.Success;
+            
+            case PasswordVerificationResult.SuccessRehashNeeded:
+                return LoginResult.Success;
+            
+            case PasswordVerificationResult.Failed:
+                return LoginResult.InvalidCredentials;
+            
+            default:
+                return LoginResult.InvalidCredentials;
+        }
+
+       
+    }
 }

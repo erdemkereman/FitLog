@@ -37,4 +37,22 @@ public class AuthController : ControllerBase
             _ => StatusCode(StatusCodes.Status500InternalServerError)
         };
     }
+    
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(
+        [FromBody] LoginRequestDto loginRequestDto)
+    {
+        var result = await _authService.LoginAsync(loginRequestDto);
+
+        return result switch
+        {
+            LoginResult.Success =>
+                Ok(new { Message = "Login successful." }),
+
+            LoginResult.InvalidCredentials =>
+                Unauthorized(new { Message = "Invalid credentials." }),
+
+            _ => Unauthorized(new { Message = "Invalid credentials." })
+        };
+    }
 }
