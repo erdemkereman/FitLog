@@ -6,6 +6,8 @@ namespace FitLog.Api.Interfaces;
 public interface IAuthService
 {
     Task<RegisterResult> RegisterAsync(RegisterRequestDto registerRequestDto);
-    Task<LoginResult> LoginAsync(LoginRequestDto loginRequestDto);
+    Task<LoginResponseDto?> LoginAsync(
+        LoginRequestDto loginRequestDto);
+    
     
 }

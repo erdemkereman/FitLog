@@ -2,6 +2,8 @@
 using FitLog.Api.Enum;
 using FitLog.Api.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace FitLog.Api.Controllers;
 
@@ -44,15 +46,31 @@ public class AuthController : ControllerBase
     {
         var result = await _authService.LoginAsync(loginRequestDto);
 
-        return result switch
+        if (result == null)
         {
-            LoginResult.Success =>
-                Ok(new { Message = "Login successful." }),
+            return Unauthorized(new
+            {
+                Message = "Invalid credentials."
+            });
+        }
 
-            LoginResult.InvalidCredentials =>
-                Unauthorized(new { Message = "Invalid credentials." }),
+        return Ok(result);
+    }
+    
+    [Authorize]
+    [HttpGet("me")]
+    public IActionResult Me()
+    {
+        var userId = User.FindFirstValue(
+            ClaimTypes.NameIdentifier);
 
-            _ => Unauthorized(new { Message = "Invalid credentials." })
-        };
+        var username = User.FindFirstValue(
+            ClaimTypes.Name);
+
+        return Ok(new
+        {
+            UserId = userId,
+            Username = username
+        });
     }
 }

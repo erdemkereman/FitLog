@@ -9,13 +9,17 @@ namespace FitLog.Api.Services;
 public class AuthService : IAuthService
 {
     private readonly IUserRepository _userRepository;
+    private readonly IJwtTokenService _jwtTokenService;
 
-    private readonly PasswordHasher<User> _passwordHasher =
-        new PasswordHasher<User>();
+    private readonly PasswordHasher<User> _passwordHasher
+        = new PasswordHasher<User>();
 
-    public AuthService(IUserRepository userRepository)
+    public AuthService(
+        IUserRepository userRepository,
+        IJwtTokenService jwtTokenService)
     {
         _userRepository = userRepository;
+        _jwtTokenService = jwtTokenService;
     }
 
     public async Task<RegisterResult> RegisterAsync(RegisterRequestDto registerRequestDto)
@@ -51,47 +55,43 @@ public class AuthService : IAuthService
         return RegisterResult.Success;
     }
 
-    public async Task<LoginResult> LoginAsync(LoginRequestDto loginRequestDto)
+    public async Task<LoginResponseDto?> LoginAsync(
+        LoginRequestDto loginRequestDto)
     {
-        var identifierControl = loginRequestDto.Identifier.Contains("@");
+        User? user;
 
-        User? identifier = null;
-
-        if (identifierControl is true)
+        if (loginRequestDto.Identifier.Contains("@"))
         {
-             identifier=await _userRepository.GetByEmailAsync(loginRequestDto.Identifier);
+            user = await _userRepository.GetByEmailAsync(
+                loginRequestDto.Identifier);
         }
         else
         {
-            identifier = await _userRepository.GetByUsernameAsync(loginRequestDto.Identifier);
+            user = await _userRepository.GetByUsernameAsync(
+                loginRequestDto.Identifier);
         }
 
-        if (identifier==null)
+        if (user == null)
         {
-            return LoginResult.InvalidCredentials;
+            return null;
         }
 
-        var password = _passwordHasher.VerifyHashedPassword(
-            identifier,
-            identifier.PasswordHash,
-            loginRequestDto.Password
-        );
+        var passwordResult = _passwordHasher.VerifyHashedPassword(
+            user,
+            user.PasswordHash,
+            loginRequestDto.Password);
 
-        switch (password)
+        if (passwordResult != PasswordVerificationResult.Success &&
+            passwordResult != PasswordVerificationResult.SuccessRehashNeeded)
         {
-            case PasswordVerificationResult.Success:
-                return LoginResult.Success;
-            
-            case PasswordVerificationResult.SuccessRehashNeeded:
-                return LoginResult.Success;
-            
-            case PasswordVerificationResult.Failed:
-                return LoginResult.InvalidCredentials;
-            
-            default:
-                return LoginResult.InvalidCredentials;
+            return null;
         }
 
-       
+        var token = _jwtTokenService.GenerateJwtToken(user);
+
+        return new LoginResponseDto
+        {
+            AccessToken = token
+        };
     }
 }
